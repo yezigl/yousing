@@ -1,6 +1,9 @@
 //index.js
 const app = getApp()
 
+const recordManager = wx.getRecorderManager();
+const innerAudioContext = wx.createInnerAudioContext();
+
 Page({
     data: {
         avatarUrl: './user-unlogin.png',
@@ -10,6 +13,7 @@ Page({
         requestResult: '',
         recording: false,
         audioFile: '',
+        audioDuration: 0,
     },
 
     onLoad: function() {
@@ -36,6 +40,38 @@ Page({
                 }
             }
         })
+        recordManager.onStop(function (res) {
+            console.log(res);
+            that.setData({
+                audioFile: res.tempFilePath,
+                audioDuration: res.duration,
+            });
+            wx.cloud.uploadFile({
+                cloudPath: 'example.aac',
+                filePath: res.tempFilePath, // 文件路径
+                success: res => {
+                    // get resource ID
+                    console.log(res)
+                    that.setData({
+                        audioFile: res.fileID
+                    });
+                },
+                fail: err => {
+                    // handle error
+                    console.log(err)
+                }
+            })
+        });
+        innerAudioContext.onPlay(() => {
+            console.log('play start')
+        });
+        innerAudioContext.onError((res) => {
+            console.log('play error')
+            console.log(res)
+        });
+        console.log('page load')
+    },
+    onUnload: function () {
     },
 
     onGetUserInfo: function(e) {
@@ -153,33 +189,24 @@ Page({
         })
     },
     startRecord: function() {
-        var that = this;
         this.setData({
             recording: true
         })
-        var recordManager = wx.getRecorderManager();
         recordManager.start({
             duration: 300000
         });
-        recordManager.onStop(function(res) {
-            console.log(res);
-            that.setData({
-                audioFile: res.tempFilePath
-            });
-        });
+        
     },
     stopRecord: function () {
         this.setData({
             recording: false
         })
-        var recordManager = wx.getRecorderManager();
         recordManager.stop();
     },
-    playerror: function(e) {
-        console.log(e)
-    },
-    playstart: function (e) {
-        console.log(e)
+    playRecord: function (e) {
+        innerAudioContext.src = this.data.audioFile;
+        console.log(innerAudioContext.duration)
+        innerAudioContext.play();
     }
 
 })

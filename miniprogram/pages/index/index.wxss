@@ -178,3 +178,38 @@ page {
     border-radius: 4rpx;
     transition-duration: 300ms;
 }
+
+.audio {
+    width: 608rpx;
+    height: 134rpx;
+    border: 2rpx solid #ddd;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: #fff;
+}
+
+.audio-play {
+    width: 134rpx;
+    height: 134rpx;
+    background-color: #eee;
+}
+
+.audio-album {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-left: 40rpx;
+    padding-top: 20rpx;
+    padding-bottom: 20rpx;
+}
+
+.audio-title {
+    font-size: 28rpx;
+    color: #333;
+}
+
+.audio-author {
+    font-size: 24rpx;
+    color: #999;
+}

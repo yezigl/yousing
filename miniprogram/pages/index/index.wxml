@@ -41,7 +41,12 @@
         </view>
     </view>
 
-        <audio src='{{audioFile}}' controls binderror='playerror' bindstart='playstart'></audio>
-
+    <view class='audio' bindtap='playRecord'>
+        <view class='audio-play'></view>
+        <view class='audio-album'>
+            <view class='audio-title'>标题</view>
+            <view class='audio-author'>作者</view>
+        </view>
+    </view>
 
 </view>
