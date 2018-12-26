@@ -1,0 +1,109 @@
+/**index.wxss**/
+page {
+    height: 100%;
+}
+
+.container {
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.record-list {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10rpx;
+}
+
+.recorder {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 300rpx;
+    /* height: 200rpx; */
+    margin-bottom: 20rpx;
+    align-items: center;
+    justify-content: center;
+}
+
+.recorder-status {
+    text-align:center;
+    font-size: 28rpx;
+    color: #999;
+}
+
+.recorder-time {
+    font-size: 24rpx;
+}
+
+.recorder-button {
+    width: 130rpx;
+    height: 130rpx;
+    border: 4rpx solid white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.recorder-stop {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 50%;
+    background-color: #EB4D3D;
+    transition-duration: 300ms;
+}
+
+.recorder-start {
+    width: 60rpx;
+    height: 60rpx;
+    background-color: #EB4D3D;
+    border-radius: 4rpx;
+    transition-duration: 300ms;
+}
+
+.audio {
+    width: 608rpx;
+    height: 134rpx;
+    border: 2rpx solid #ddd;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: #fff;
+}
+
+.audio-play {
+    width: 134rpx;
+    height: 134rpx;
+    background-color: #eee;
+}
+
+.audio-album {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-left: 40rpx;
+    padding-top: 20rpx;
+    padding-bottom: 20rpx;
+    width:100%;
+}
+
+.audio-title {
+    font-size: 28rpx;
+    color: #333;
+}
+
+.audio-author {
+    font-size: 24rpx;
+    color: #999;
+}
+
+.audio-time {
+    align-self: flex-end;
+    font-size: 24rpx;
+    color: #999;
+}

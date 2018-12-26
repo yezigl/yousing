@@ -8,15 +8,14 @@ Page({
     data: {
         avatarUrl: './user-unlogin.png',
         userInfo: {},
+
         logged: false,
         takeSession: false,
         requestResult: '',
-        recording: false,
-        audioFile: '',
-        audioDuration: 0,
     },
 
     onLoad: function() {
+        var that = this;
         if (!wx.cloud) {
             wx.redirectTo({
                 url: '../chooseLib/chooseLib',
@@ -40,36 +39,6 @@ Page({
                 }
             }
         })
-        recordManager.onStop(function (res) {
-            console.log(res);
-            that.setData({
-                audioFile: res.tempFilePath,
-                audioDuration: res.duration,
-            });
-            wx.cloud.uploadFile({
-                cloudPath: 'example.aac',
-                filePath: res.tempFilePath, // 文件路径
-                success: res => {
-                    // get resource ID
-                    console.log(res)
-                    that.setData({
-                        audioFile: res.fileID
-                    });
-                },
-                fail: err => {
-                    // handle error
-                    console.log(err)
-                }
-            })
-        });
-        innerAudioContext.onPlay(() => {
-            console.log('play start')
-        });
-        innerAudioContext.onError((res) => {
-            console.log('play error')
-            console.log(res)
-        });
-        console.log('page load')
     },
     onUnload: function () {
     },
@@ -154,59 +123,5 @@ Page({
             }
         })
     },
-
-    doRecord: function() {
-        var that = this;
-        // wx.openSetting({
-        //     success(res) {
-        //         console.log(res)
-        //     }
-        // })
-        console.log(new Date().getTime())
-        wx.getSetting({
-            success(res) {
-                console.log(res)
-                if (res.authSetting['scope.record']) {
-                    console.log('auth start')
-                    console.log(new Date().getTime())
-                    if (that.data.recording) {
-                        that.stopRecord();
-                    } else {
-                        that.startRecord();
-                    }
-                } else {
-                    wx.authorize({
-                        scope: 'scope.record',
-                        success() {
-                            console.log('not auth, start')
-                        },
-                        fail() {
-                            console.log('auth fail')
-                        }
-                    })
-                }
-            }
-        })
-    },
-    startRecord: function() {
-        this.setData({
-            recording: true
-        })
-        recordManager.start({
-            duration: 300000
-        });
-        
-    },
-    stopRecord: function () {
-        this.setData({
-            recording: false
-        })
-        recordManager.stop();
-    },
-    playRecord: function (e) {
-        innerAudioContext.src = this.data.audioFile;
-        console.log(innerAudioContext.duration)
-        innerAudioContext.play();
-    }
 
 })
