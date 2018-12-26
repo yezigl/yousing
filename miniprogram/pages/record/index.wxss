@@ -27,6 +27,8 @@ page {
     margin-bottom: 20rpx;
     align-items: center;
     justify-content: center;
+    position: fixed;
+    bottom: 0;
 }
 
 .recorder-status {
@@ -89,7 +91,14 @@ page {
     padding-left: 40rpx;
     padding-top: 20rpx;
     padding-bottom: 20rpx;
-    width:100%;
+    width: 400rpx;
+}
+
+.audio-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 .audio-title {
@@ -103,7 +112,7 @@ page {
 }
 
 .audio-time {
-    align-self: flex-end;
     font-size: 24rpx;
     color: #999;
+    display:flex;
 }

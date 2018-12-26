@@ -3,11 +3,17 @@
 
     <view class='record-list'>
         <view class='audio' bindtap='playRecord' wx:for='{{recordList}}' wx:key='_id' data-item='{{item}}'>
-            <view class='audio-play'></view>
+            <view class='audio-play'>
+                <open-data type="userAvatarUrl"></open-data>
+            </view>
             <view class='audio-album'>
-                <view class='audio-title'>标题</view>
+                <view class='audio-top'>
+                    <view class='audio-title'>标题</view>
+                    <view class='audio-time'>
+                        <view wx:if='{{item.playTime}}'>{{item.playTime}}/</view>{{item.time}}
+                    </view>
+                </view>
                 <view class='audio-author'>作者</view>
-                <view class='audio-time'>{{item.time}}</view>
             </view>
         </view>
     </view>

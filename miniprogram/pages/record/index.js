@@ -55,7 +55,6 @@ Page({
             }
         })
         recordManager.onStop(function(res) {
-            return;
             console.log(res);
             that.setData({
                 audioFile: res.tempFilePath,
@@ -63,7 +62,7 @@ Page({
             });
             var duration = res.duration;
             wx.cloud.uploadFile({
-                cloudPath: 'audio/' + new Date().getTime() + '.aac',
+                cloudPath: 'audio/' + new Date().getTime() + '.mp3',
                 filePath: res.tempFilePath, // 文件路径
                 success: res => {
                     // get resource ID
@@ -97,11 +96,9 @@ Page({
             return;
         }
         var tt = time || ((new Date().getTime() - this.data.recordStart) / 1000);
-        console.log(tt);
         var min = Math.floor(tt / 60);
         var sec = Math.floor(tt % 60);
-        console.log(min, sec)
-        var ft = (min > 10 ? min : '0' + min) + ':' + (sec > 10 ? sec : '0' + sec);
+        var ft = (min > 9 ? min : '0' + min) + ':' + (sec > 9 ? sec : '0' + sec);
         return ft;
     },
 
@@ -120,7 +117,7 @@ Page({
     listRecord: function() {
         var that = this;
         const db = wx.cloud.database();
-        db.collection('user_record').limit(10).orderBy('create_time', 'desc')
+        db.collection('user_record').limit(10).orderBy('createTime', 'desc')
             .where({
                 '_openid': app.globalData.openid
             })
@@ -176,7 +173,8 @@ Page({
     startRecord: function() {
         var that = this;
         recordManager.start({
-            duration: 300000
+            duration: 300000,
+            format: 'mp3',
         });
         var interval = setInterval(function() {
             that.setData({
@@ -201,20 +199,35 @@ Page({
     },
     playRecord: function(e) {
         console.log(e);
-        var item = e.currentTarget.dataset.item;
-        console.log(item.file_id)
-        innerAudioContext.src = item.file_id;
+        var that = this;
+        var eitem = e.currentTarget.dataset.item;
+        var item = this.data.recordList.filter(e => e._id == eitem._id)[0];
+        console.log(item.fileID)
+        innerAudioContext.src = item.fileID;
         console.log(innerAudioContext.duration)
         innerAudioContext.play();
+        item.playTime = '00:00';
+        var time = 0;
+        var internal = setInterval(function() {
+            console.log(item)
+            time++;
+            if (time > item.duration / 1000) {
+                clearInterval(internal);
+                item.playTime = '';
+                return;
+            }
+            console.log(time)
+            item.playTime = that.formatTime(time);
+        }, 1000);
     },
 
     addUserRecord: function(fileID, duration) {
         const db = wx.cloud.database();
         db.collection('user_record').add({
             data: {
-                'file_id': fileID,
+                'fileID': fileID,
                 'duration': duration,
-                'create_time': db.serverDate()
+                'createTime': db.serverDate()
             },
             success(res) {
                 console.log('add db success', res)
